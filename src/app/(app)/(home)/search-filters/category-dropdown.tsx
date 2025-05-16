@@ -7,9 +7,11 @@ import { Category } from "@/payload-types"
 import { useRef, useState } from "react"
 import { useDropdownPosition } from "./use-dropdown-position"
 import { SubcategoryMenu } from "./subcategory-menu"
+import { CustomCategory } from "./types"
+import Link from "next/link"
 
 interface Props{
-    category:Category,
+    category:CustomCategory,
     isActive?:boolean,
     isNavigationHovered?:boolean
 }
@@ -29,6 +31,12 @@ export const CategoryDropdown = ({
         }
     }
     const onMouseLeave = () => setIsOpen(false);
+    //Potentially Improve Mobile experience by adding a delay to the dropdown opening
+    const toggleDropdown = () => {
+        if(category.subcategories.length){
+            setIsOpen(!isOpen);
+        }
+    }
 
     const dropdownPosition = getDropdownPosition();
     return(
@@ -37,16 +45,23 @@ export const CategoryDropdown = ({
             ref={dropdownRef}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
+            onClick={toggleDropdown}
         >
             <div className="relative">
                 <Button 
                     variant="elevated"
                     className={cn(
                         "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black", 
-                        isActive && !isNavigationHovered && "bg-white border-primary"
-                    )}
+                        isActive && !isNavigationHovered && "bg-white border-primary",
+                        isOpen && "bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[4px] -translate-y-[4px] border-primary"
+                    )} 
                 >
-                    {category.name}
+                    <Link
+                        // prefetch
+                        href={`/${category.slug === 'all' ? "": category.slug}`}
+                    >
+                        {category.name}
+                    </Link>
                 </Button>
                 {category.subcategories && category.subcategories.length > 0 && (
                     <div
