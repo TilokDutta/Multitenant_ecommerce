@@ -1,5 +1,6 @@
 import { getPayload } from 'payload';
 import { cache } from 'react';
+import superjson from "superjson"
 
 import config from '@payload-config'
 import { initTRPC } from '@trpc/server';
