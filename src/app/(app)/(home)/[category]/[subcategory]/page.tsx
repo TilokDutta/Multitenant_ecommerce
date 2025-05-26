@@ -1,30 +1,41 @@
-import {
-  ProductList,
-  ProductListSkeleton,
-} from "@/modules/products/ui/components/product-list";
+import { ProductListView } from "@/modules/products/ui/views/product-list-view";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import React, { Suspense } from "react";
+import { SearchParams } from "nuqs/server";
+import React from "react";
 
 interface Props {
   params: Promise<{
     subcategory: string;
   }>;
+  searchParams: Promise<SearchParams>
 }
 
-const Category_Page = async ({params}: Props) => {
+const SubCategory_Page = async ({params, searchParams}: Props) => {
   const { subcategory } = await params;
+  const {rawMinPrice, rawMaxPrice} = await searchParams;
+  // console.log(JSON.stringify(minPrice),"this is from rsc");
+  // added this for the normalising the min and max price
+  // added from chatgpt
+  const normalizeParam = (param: string | string[] | undefined): string | null => {
+    if (Array.isArray(param)) return param[0] ?? null;
+      return param ?? null;
+    };
+
+  const minPrice = normalizeParam(rawMinPrice);
+  const maxPrice = normalizeParam(rawMaxPrice);
+    
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({
+  void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({ 
     category:subcategory,
+    minPrice,
+    maxPrice,
   }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<ProductListSkeleton />}>
-        <ProductList category={subcategory}/>
-      </Suspense>
+      <ProductListView category = {subcategory}/>
     </HydrationBoundary>
   );
 };
 
-export default Category_Page;
+export default SubCategory_Page;
