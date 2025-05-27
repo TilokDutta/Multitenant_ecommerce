@@ -90,7 +90,7 @@ export const productsRouter = createTRPCRouter({
 
       const data = await ctx.db.find({
         collection:"products",
-        depth:1, // populate "category" and "image"
+        depth:1, // populate "category" and "image" and "tenant"
         where,
         sort,
         page:input.cursor,
@@ -100,7 +100,8 @@ export const productsRouter = createTRPCRouter({
         ...data,
         docs:data.docs.map((doc) => ({
           ...doc,
-          image: doc.image as Media | null
+          image: doc.image as Media | null,
+          tenant:doc.tenant as Tenant,
         }))
       };
     }),

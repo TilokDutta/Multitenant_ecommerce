@@ -53,7 +53,7 @@ export const ProductList = ({ category }: Props) => {
             id={product.id}
             name={product.name}
             imageUrl={product.image?.url}
-            authorUsername="tilok"
+            authorUsername={product.tenant.name}
             authorImageUrl={undefined}
             price={product.price}
             reviewRating={3}

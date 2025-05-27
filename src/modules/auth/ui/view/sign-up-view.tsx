@@ -97,7 +97,7 @@ export const SignUpView = () => {
                                         className={cn("hidden",showPreview && "block")}
                                     >
                                         Your store will be available at&nbsp;
-                                        <strong>{username}</strong>.shop.som
+                                        <strong>{username}</strong>.funroad.som
                                     </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
