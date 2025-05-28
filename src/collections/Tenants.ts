@@ -1,51 +1,51 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig } from 'payload';
 
 export const Tenants: CollectionConfig = {
-  slug: "tenants",
+  slug: 'tenants',
   admin: {
-    useAsTitle: "slug",
+    useAsTitle: 'slug',
   },
   fields: [
     {
-      name: "name",
+      name: 'name',
       required: true,
-      type: "text",
-      label: "Store name",
+      type: 'text',
+      label: 'Store name',
       admin: {
         description: "This is the name of the store (e.g. Tilok's Store)",
       },
     },
     {
-      name: "slug",
-      type: "text",
+      name: 'slug',
+      type: 'text',
       index: true,
       required: true,
       unique: true,
       admin: {
         description:
-          "This is the subdomain for the store ( e.g. [slug].funroad.com)",
+          "This is the subdomain for the store ( e.g. [slug].funroad.com )",
       },
     },
     {
-      name: "image",
-      type: "upload",
-      relationTo: "media",
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
     },
     {
-      name: "stripeAccountId",
-      type: "text",
+      name: 'stripeAccountId',
+      type: 'text',
       required: true,
       admin: {
         readOnly: true,
       },
     },
     {
-      name: "stripeDetailsSubmitted",
-      type: "checkbox",
+      name: 'stripeDetailsSubmitted',
+      type: 'checkbox',
       admin: {
         readOnly: true,
         description:
-          "You cannot create products until you submit your Stripe details.",
+          'You cannot create products until you submit your Stripe details.',
       },
     },
   ],

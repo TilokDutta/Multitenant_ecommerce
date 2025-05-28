@@ -1,5 +1,5 @@
-import { getPayload } from "payload"
-import config from "@payload-config"
+import { getPayload } from "payload";
+import config from "@payload-config";
 
 const categories = [
   {
@@ -12,17 +12,11 @@ const categories = [
     slug: "business-money",
     subcategories: [
       { name: "Accounting", slug: "accounting" },
-      {
-        name: "Entrepreneurship",
-        slug: "entrepreneurship",
-      },
+      { name: "Entrepreneurship", slug: "entrepreneurship" },
       { name: "Gigs & Side Projects", slug: "gigs-side-projects" },
       { name: "Investing", slug: "investing" },
       { name: "Management & Leadership", slug: "management-leadership" },
-      {
-        name: "Marketing & Sales",
-        slug: "marketing-sales",
-      },
+      { name: "Marketing & Sales", slug: "marketing-sales" },
       { name: "Networking, Careers & Jobs", slug: "networking-careers-jobs" },
       { name: "Personal Finance", slug: "personal-finance" },
       { name: "Real Estate", slug: "real-estate" },
@@ -135,60 +129,60 @@ const categories = [
       { name: "Macro", slug: "macro" },
     ],
   },
-]
+];
 
 const seed = async () => {
-    const payload = await getPayload({ config });
+  const payload = await getPayload({ config });
 
-    //create admin tenant
-    const adminTenant = await payload.create({
-      collection:"tenants",
-      data:{
-        name:"admin",
-        slug:"admin",
-        stripeAccountId:"admin",
+  // Create admin tenant
+  const adminTenant = await payload.create({
+    collection: "tenants",
+    data: {
+      name: "admin",
+      slug: "admin",
+      stripeAccountId: "admin",
+    },
+  });
+
+  // Create admin user
+  await payload.create({
+    collection: "users",
+    data: {
+      email: "admin@demo.com",
+      password: "admin", // prefer consistent password here
+      roles: ["super-admin"],
+      username: "admin",
+      tenants: [
+        {
+          tenant: adminTenant.id,
+        },
+      ],
+    },
+  });
+
+  for (const category of categories) {
+    const parentCategory = await payload.create({
+      collection: "categories",
+      data: {
+        name: category.name,
+        slug: category.slug,
+        color: category.color,
+        parent: null,
       },
     });
 
-    //create admin user
-    await payload.create({
-      collection:"users",
-      data:{
-        email:"admin@demo.com",
-        password:"admin",
-        roles:["super-admin"],
-        username:"admin",
-        tenants:[
-          {
-            tenant:adminTenant.id,
-          },
-        ],
-      },
-    });
-
-    for(const category of categories){
-        const parentCategory = await payload.create({
-            collection:"categories",
-            data:{
-                name:category.name,
-                slug:category.slug,
-                color:category.color,
-                parent:null,
-            },
-        });
-
-        for(const subCategory of category.subcategories || []){
-          await payload.create({
-            collection:"categories",
-            data:{
-              name:subCategory.name,
-              slug:subCategory.slug,
-              parent:parentCategory.id,
-            },
-          });
-        }
+    for (const subCategory of category.subcategories || []) {
+      await payload.create({
+        collection: "categories",
+        data: {
+          name: subCategory.name,
+          slug: subCategory.slug,
+          parent: parentCategory.id,
+        },
+      });
     }
-}
+  }
+};
 
 await seed();
 
