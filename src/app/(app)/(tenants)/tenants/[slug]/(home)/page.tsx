@@ -6,7 +6,7 @@ import { DEFAULT_LIMIT } from "@/modules/constants";
 
 interface Props {
   params: Promise<{
-    category: string;
+    slug: string;
   }>;
   searchParams:Promise<{
     minPrice:string | undefined,
@@ -14,23 +14,21 @@ interface Props {
   }>
 }
 
-const Category_Page = async ({params, searchParams}: Props) => {
-  const { category } = await params;
+const Page = async ({params, searchParams}: Props) => {
+  const { slug } = await params;
   const {minPrice, maxPrice} = await searchParams;
-  console.log(JSON.stringify(minPrice),"this is from rsc");
-
   const queryClient = getQueryClient();
   void queryClient.prefetchInfiniteQuery(trpc.products.getMany.infiniteQueryOptions({
-    category,
+    tenantSlug:slug,
     minPrice,
     maxPrice,
     limit:DEFAULT_LIMIT,
   }));
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductListView category = {category}/>
+      <ProductListView tenantSlug={slug} narrowView/>
     </HydrationBoundary>
   );
 };
 
-export default Category_Page;
+export default Page;
