@@ -161,7 +161,7 @@ export interface Tenant {
    */
   name: string;
   /**
-   * This is the subdomain for the store ( e.g. [slug].domain.com)
+   * This is the subdomain for the store ( e.g. [slug].funroad.com )
    */
   slug: string;
   image?: (string | null) | Media;
@@ -177,7 +177,6 @@ export interface Tenant {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
-
 export interface Media {
   id: string;
   alt: string;
