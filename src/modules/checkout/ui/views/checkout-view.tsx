@@ -44,10 +44,11 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
   }));
 
   useEffect(() => {
+    console.log("trigerred");
     if(states.success){
-      setStates({success:false,cancel:false});
+      // setStates({success:false,cancel:false});
       clearCart();
-      router.push("/products")
+      // router.push("/products")
     }
   },[states.success,clearCart,router,setStates])
 
