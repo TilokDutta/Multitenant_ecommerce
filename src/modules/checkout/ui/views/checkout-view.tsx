@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useCart } from "../../hooks/use-cart";
 import { generateTenantURL } from "@/lib/utils";
@@ -19,38 +19,49 @@ interface CheckoutViewProps {
 
 export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
   const router = useRouter();
-  const [states,setStates] = useCheckoutStates();
-  const { productIds, removeProduct,clearCart } = useCart(tenantSlug);
+  const [states, setStates] = useCheckoutStates();
+  const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { data, error, isLoading } = useQuery(
     trpc.checkout.getProducts.queryOptions({
       ids: productIds,
     })
   );
 
-  const purchase = useMutation(trpc.checkout.purchase.mutationOptions({
-    onMutate:() => {
-      setStates({success:false,cancel:false});
-    },
-    onSuccess:(data) => {
-      window.location.href = data.url;
-    },
-    onError:(error) => {
-      if(error.data?.code ===  "UNAUTHORIZED"){
-        router.push("/sign-in");
-      }
-      toast.error(error.message);
-    },
-  }));
+  const purchase = useMutation(
+    trpc.checkout.purchase.mutationOptions({
+      onMutate: () => {
+        setStates({ success: false, cancel: false });
+      },
+      onSuccess: (data) => {
+        window.location.href = data.url;
+      },
+      onError: (error) => {
+        if (error.data?.code === "UNAUTHORIZED") {
+          router.push("/sign-in");
+        }
+        toast.error(error.message);
+      },
+    })
+  );
 
   useEffect(() => {
     console.log("trigerred");
-    if(states.success){
+    if (states.success) {
       // setStates({success:false,cancel:false});
       clearCart();
-      // router.push("/products")
+      queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
+      router.push("/library");
     }
-  },[states.success,clearCart,router,setStates])
+  }, [
+    states.success,
+    clearCart,
+    router,
+    setStates,
+    queryClient,
+    trpc.library.getMany,
+  ]);
 
   useEffect(() => {
     if (error?.data?.code === "NOT_FOUND") {
@@ -60,13 +71,13 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
   }, [error, clearCart]);
 
   if (isLoading) {
-    return(
-        <div className="lg:pt-16 pt-4 px-4 lg:px-12">
-            <div className="border border-black border-dashed flex items-center justidy-center p-8 flex-col gap-y-4 bg-white w-full rounded-lg">
-                <LoaderIcon className="text-muted-foreground animate-spin" />
-            </div>
+    return (
+      <div className="lg:pt-16 pt-4 px-4 lg:px-12">
+        <div className="border border-black border-dashed flex items-center justidy-center p-8 flex-col gap-y-4 bg-white w-full rounded-lg">
+          <LoaderIcon className="text-muted-foreground animate-spin" />
         </div>
-    )
+      </div>
+    );
   }
 
   if (data?.totalDocs === 0) {
@@ -104,7 +115,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
         <div className="lg:col-span-3">
           <CheckoutSidebar
             total={data?.totalPrice || 0}
-            onPurchase={() => purchase.mutate({tenantSlug,productIds})}
+            onPurchase={() => purchase.mutate({ tenantSlug, productIds })}
             isCanceled={states.cancel}
             disabled={purchase.isPending}
           />
