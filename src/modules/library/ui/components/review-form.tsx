@@ -26,30 +26,38 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  
-  const createReview = useMutation(trpc.reviews.create.mutationOptions({
-    onSuccess: () => {
-      queryClient.invalidateQueries(trpc.reviews.getOne.queryOptions({
-        productId,
-      }))
-      setIsPreview(true);
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  }))
 
-  const updateReview = useMutation(trpc.reviews.update.mutationOptions({
-    onSuccess: () => {
-      queryClient.invalidateQueries(trpc.reviews.getOne.queryOptions({
-        productId,
-      }))
-      setIsPreview(true);
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  }))
+  const createReview = useMutation(
+    trpc.reviews.create.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries(
+          trpc.reviews.getOne.queryOptions({
+            productId,
+          })
+        );
+        setIsPreview(true);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+
+  const updateReview = useMutation(
+    trpc.reviews.update.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries(
+          trpc.reviews.getOne.queryOptions({
+            productId,
+          })
+        );
+        setIsPreview(true);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,18 +69,18 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
-    if(initialData){
+    if (initialData) {
       updateReview.mutate({
-        reviewId:initialData.id,
-        rating:values.rating,
-        description:values.description,
-      })
-    }else{
+        reviewId: initialData.id,
+        rating: values.rating,
+        description: values.description,
+      });
+    } else {
       createReview.mutate({
         productId,
-        rating:values.rating,
-        description:values.description,
-      })
+        rating: values.rating,
+        description: values.description,
+      });
     }
   };
 
@@ -92,9 +100,9 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
             <FormItem>
               <FormControl>
                 <StarPicker
-                    value={field.value}
-                    onChange={field.onChange}
-                    disabled={isPreview}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={isPreview}
                 />
               </FormControl>
             </FormItem>
@@ -139,5 +147,26 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
         </Button>
       )}
     </Form>
+  );
+};
+
+export const ReviewFormSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-y-4">
+      <p className="font-medium ">Liked it ? Give it a rating.</p>
+
+      <StarPicker disabled />
+
+      <Textarea placeholder="Want to leave a written review." disabled />
+      <Button
+        variant="elevated"
+        disabled
+        type="button"
+        size="lg"
+        className="bg-black text-white hover:bg-pink-400 hover:text-primary w-fit"
+      >
+        Post review
+      </Button>
+    </div>
   );
 };
