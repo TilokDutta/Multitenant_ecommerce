@@ -1,5 +1,5 @@
 import { Footer } from "@/modules/tenants/ui/components/footer";
-import { Navbar} from "@/modules/checkout/ui/components/navbar";
+import { Navbar } from "@/modules/checkout/ui/components/navbar";
 import React from "react";
 
 interface LayoutProps {

@@ -1,22 +1,22 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
-    matcher:[
-        "/((?!api/|_next/|_static/|_vercel|media/|[\w-]+\.\w+).*)"
-    ],
+  matcher: ["/((?!api/|_next/|_static/|_vercel|media/|[\w-]+\.\w+).*)"],
 };
 
-export default async function middleware(req:NextRequest){
-    const url = req.nextUrl;
+export default async function middleware(req: NextRequest) {
+  const url = req.nextUrl;
 
-    const hostname = req.headers.get("host") || "";
+  const hostname = req.headers.get("host") || "";
 
-    const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "";
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "";
 
-    if(hostname.endsWith(`.${rootDomain}`)){
-        const tenantSlug = hostname.replace(`.$(rootDomain)`,"");
-        return NextResponse.rewrite(new URL(`/api/tenants/${tenantSlug}${url.pathname}`, req.url));
-    }
+  if (hostname.endsWith(`.${rootDomain}`)) {
+    const tenantSlug = hostname.replace(`.$(rootDomain)`, "");
+    return NextResponse.rewrite(
+      new URL(`/api/tenants/${tenantSlug}${url.pathname}`, req.url)
+    );
+  }
 
-    return NextResponse.next();
+  return NextResponse.next();
 }

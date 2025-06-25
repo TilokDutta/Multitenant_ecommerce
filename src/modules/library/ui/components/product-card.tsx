@@ -34,7 +34,7 @@ export const ProductCard = ({
         </div>
         <div className="p-4 border-y flex flex-col gap-3 flex-1">
           <h2 className="text-lg font-medium line-clamp-4 ">{name}</h2>
-          <div className="items-center flex gap-2" >
+          <div className="items-center flex gap-2">
             {tenantImageUrl && (
               <Image
                 alt={tenantSlug}
@@ -54,7 +54,7 @@ export const ProductCard = ({
               </p>
             </div>
           )}
-        </div> 
+        </div>
       </div>
     </Link>
   );
@@ -62,6 +62,6 @@ export const ProductCard = ({
 
 export const ProductCardSkeleton = () => {
   return (
-    <div className="w-full aspect-3/4 bg-neutral-200 rounded-lg animate-pulse"/>
-    );
+    <div className="w-full aspect-3/4 bg-neutral-200 rounded-lg animate-pulse" />
+  );
 };

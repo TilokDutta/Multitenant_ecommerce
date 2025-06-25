@@ -8,25 +8,30 @@ interface Props {
   params: Promise<{
     slug: string;
   }>;
-  searchParams:Promise<{
-    minPrice:string | undefined,
-    maxPrice:string | undefined;
-  }>
+  searchParams: Promise<{
+    minPrice: string | undefined;
+    maxPrice: string | undefined;
+  }>;
 }
 
-const Page = async ({params, searchParams}: Props) => {
+export const dynamic = "force-dynamic";
+
+
+const Page = async ({ params, searchParams }: Props) => {
   const { slug } = await params;
-  const {minPrice, maxPrice} = await searchParams;
+  const { minPrice, maxPrice } = await searchParams;
   const queryClient = getQueryClient();
-  void queryClient.prefetchInfiniteQuery(trpc.products.getMany.infiniteQueryOptions({
-    tenantSlug:slug,
-    minPrice,
-    maxPrice,
-    limit:DEFAULT_LIMIT,
-  }));
+  void queryClient.prefetchInfiniteQuery(
+    trpc.products.getMany.infiniteQueryOptions({
+      tenantSlug: slug,
+      minPrice,
+      maxPrice,
+      limit: DEFAULT_LIMIT,
+    })
+  );
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductListView tenantSlug={slug} narrowView/>
+      <ProductListView tenantSlug={slug} narrowView />
     </HydrationBoundary>
   );
 };

@@ -26,30 +26,30 @@ export const StarPicker = ({
         className
       )}
     >
-        {[1, 2, 3, 4, 5].map((star) => (
-            <button
-                key={star}
-                aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`} // added for screen readers from chatgpt
-                type="button"
-                disabled={disabled}
-                className={cn(
-                    "p-0.5 hover:scale-110 transition",
-                    !disabled && "cursor-pointer"
-                )}
-                onClick={() => onChange?.(star)}
-                onMouseEnter={() => setHoverValue(star)}
-                onMouseLeave={() => setHoverValue(0)}
-            >
-                <StarIcon
-                    className={cn(
-                        "size-5",
-                        (hoverValue || value) >= star 
-                        ? "fill-black stroke-black"
-                        : "stroke-black"
-                    )}
-                />
-            </button>
-        ))}
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`} // added for screen readers from chatgpt
+          type="button"
+          disabled={disabled}
+          className={cn(
+            "p-0.5 hover:scale-110 transition",
+            !disabled && "cursor-pointer"
+          )}
+          onClick={() => onChange?.(star)}
+          onMouseEnter={() => setHoverValue(star)}
+          onMouseLeave={() => setHoverValue(0)}
+        >
+          <StarIcon
+            className={cn(
+              "size-5",
+              (hoverValue || value) >= star
+                ? "fill-black stroke-black"
+                : "stroke-black"
+            )}
+          />
+        </button>
+      ))}
     </div>
   );
 };
