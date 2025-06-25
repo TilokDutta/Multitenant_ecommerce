@@ -34,14 +34,14 @@ export const PriceFilter = ({
   onMinPriceChange,
   onMaxPriceChange,
 }: Props) => {
-    const handleMaxPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const numericValue = e.target.value.replace(/[^0-9]/g,"");
-        onMaxPriceChange(numericValue);
-    }
-    const handleMinPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const numericValue = e.target.value.replace(/[^0-9]/g,"");
-        onMinPriceChange(numericValue);
-    }
+  const handleMaxPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+    onMaxPriceChange(numericValue);
+  };
+  const handleMinPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+    onMinPriceChange(numericValue);
+  };
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-2">

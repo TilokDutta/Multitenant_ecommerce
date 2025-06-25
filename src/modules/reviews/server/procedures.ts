@@ -109,7 +109,7 @@ export const reviewsRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       const existingReview = await ctx.db.findByID({
-        depth:0,
+        depth: 0,
         collection: "reviews",
         id: input.reviewId,
       });
@@ -120,16 +120,16 @@ export const reviewsRouter = createTRPCRouter({
         });
       }
 
-      if(existingReview.user !== ctx.session.user.id){
+      if (existingReview.user !== ctx.session.user.id) {
         throw new TRPCError({
-          code:"FORBIDDEN",
-          message:"you are not allowed to update this review",
-        })
+          code: "FORBIDDEN",
+          message: "you are not allowed to update this review",
+        });
       }
 
       const updatedReview = await ctx.db.update({
         collection: "reviews",
-        id:input.reviewId,
+        id: input.reviewId,
         data: {
           rating: input.rating,
           description: input.description,

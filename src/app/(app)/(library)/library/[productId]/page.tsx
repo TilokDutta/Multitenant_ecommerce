@@ -4,6 +4,7 @@ import {
 } from "@/modules/library/ui/views/product-view";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
 import React, { Suspense } from "react";
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   }>;
 }
 
-const page = async ({ params }: Props) => {
+const Page = async ({ params }: Props) => {
   const { productId } = await params;
 
   const queryClient = getQueryClient();
@@ -37,4 +38,4 @@ const page = async ({ params }: Props) => {
   );
 };
 
-export default page;
+export default Page;

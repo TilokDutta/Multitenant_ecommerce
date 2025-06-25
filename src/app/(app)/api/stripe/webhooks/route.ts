@@ -57,8 +57,8 @@ export async function POST(req: Request) {
               expand: ["line_items.data.price.product"],
             },
             {
-              stripeAccount:event.account,
-            },
+              stripeAccount: event.account,
+            }
           );
 
           if (

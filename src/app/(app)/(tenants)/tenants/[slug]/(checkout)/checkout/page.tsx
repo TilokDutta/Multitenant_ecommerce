@@ -1,13 +1,15 @@
-import { CheckoutView } from '@/modules/checkout/ui/views/checkout-view'
-import React from 'react'
+import { CheckoutView } from "@/modules/checkout/ui/views/checkout-view";
+import React from "react";
 
-interface PageProps{
-    params:Promise<{slug:string}>
+interface PageProps {
+  params: Promise<{ slug: string }>;
 }
 
-const page = async({params}:PageProps) => {
-    const {slug} = await params
-  return <CheckoutView tenantSlug={slug}/>
-}
+export const dynamic = "force-dynamic";
 
-export default page
+const Page = async ({ params }: PageProps) => {
+  const { slug } = await params;
+  return <CheckoutView tenantSlug={slug} />;
+};
+
+export default Page;

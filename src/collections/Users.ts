@@ -1,6 +1,6 @@
-import type { CollectionConfig } from 'payload';
+import type { CollectionConfig } from "payload";
 import { tenantsArrayField } from "@payloadcms/plugin-multi-tenant/fields";
-import { isSuperAdmin } from '@/lib/access';
+import { isSuperAdmin } from "@/lib/access";
 
 const defaultTenantArrayField = tenantsArrayField({
   tenantsArrayFieldName: "tenants",
@@ -8,35 +8,35 @@ const defaultTenantArrayField = tenantsArrayField({
   tenantsArrayTenantFieldName: "tenant",
   arrayFieldAccess: {
     read: () => true,
-    create: ({req}) => isSuperAdmin(req.user),
-    update: ({req}) => isSuperAdmin(req.user),
+    create: ({ req }) => isSuperAdmin(req.user),
+    update: ({ req }) => isSuperAdmin(req.user),
   },
   tenantFieldAccess: {
     read: () => true,
-    create: ({req}) => isSuperAdmin(req.user),
-    update: ({req}) => isSuperAdmin(req.user),
+    create: ({ req }) => isSuperAdmin(req.user),
+    update: ({ req }) => isSuperAdmin(req.user),
   },
 });
 
 export const Users: CollectionConfig = {
-  slug: 'users',
-  access:{
-    read : () => true,
-    create: ({req}) => isSuperAdmin(req.user),
-    delete: ({req}) => isSuperAdmin(req.user),
-    update: ({req,id}) =>{
-      if(isSuperAdmin(req.user)) return true;
+  slug: "users",
+  access: {
+    read: () => true,
+    create: ({ req }) => isSuperAdmin(req.user),
+    delete: ({ req }) => isSuperAdmin(req.user),
+    update: ({ req, id }) => {
+      if (isSuperAdmin(req.user)) return true;
       return req.user?.id === id;
-    }
+    },
   },
   admin: {
-    useAsTitle: 'email',
-    hidden: ({user}) => !isSuperAdmin(user),
+    useAsTitle: "email",
+    hidden: ({ user }) => !isSuperAdmin(user),
   },
   auth: true,
   fields: [
     {
-      name: 'username',
+      name: "username",
       required: true,
       unique: true,
       type: "text",
@@ -51,8 +51,8 @@ export const Users: CollectionConfig = {
       hasMany: true,
       options: ["super-admin", "user"],
       access: {
-        update: ({req}) => isSuperAdmin(req.user),
-      }
+        update: ({ req }) => isSuperAdmin(req.user),
+      },
     },
     {
       ...defaultTenantArrayField,

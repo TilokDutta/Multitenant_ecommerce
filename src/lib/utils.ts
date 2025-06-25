@@ -1,11 +1,11 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
-export function generateTenantURL(tenantSlug:string){
-  if(process.env.NODE_ENV === "development"){
+export function generateTenantURL(tenantSlug: string) {
+  if (process.env.NODE_ENV === "development") {
     return `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenantSlug}`;
   }
   const protocol = "https";
@@ -15,12 +15,12 @@ export function generateTenantURL(tenantSlug:string){
   //   protocol="http";
   // }
   return `${protocol}://${tenantSlug}.${domain}`;
-};
+}
 
-export function formatCurrency(value:number | string ){
-  return new Intl.NumberFormat("en-IN",{
-    style:"currency",
-    currency:"INR",
-    maximumFractionDigits:0,
-  }).format(Number(value))
-};
+export function formatCurrency(value: number | string) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(Number(value));
+}

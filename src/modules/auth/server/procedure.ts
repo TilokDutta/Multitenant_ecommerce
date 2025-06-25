@@ -35,11 +35,11 @@ export const authRouter = createTRPCRouter({
 
       const account = await stripe.accounts.create({});
 
-      if(!account){
+      if (!account) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message:"Failed to create stripe account."
-        })
+          message: "Failed to create stripe account.",
+        });
       }
 
       const tenant = await ctx.db.create({
@@ -86,29 +86,27 @@ export const authRouter = createTRPCRouter({
       });
     }),
 
-  login: baseProcedure
-    .input(loginSchema)
-    .mutation(async ({ input, ctx }) => {
-      const data = await ctx.db.login({
-        collection: "users",
-        data: {
-          email: input.email,
-          password: input.password,
-        },
+  login: baseProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
+    const data = await ctx.db.login({
+      collection: "users",
+      data: {
+        email: input.email,
+        password: input.password,
+      },
+    });
+
+    if (!data.token) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Failed to login",
       });
+    }
 
-      if (!data.token) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Failed to login",
-        });
-      }
+    await generateAuthCookie({
+      prefix: ctx.db.config.cookiePrefix,
+      value: data.token,
+    });
 
-      await generateAuthCookie({
-        prefix: ctx.db.config.cookiePrefix,
-        value: data.token,
-      });
-
-      return data;
-    }),
+    return data;
+  }),
 });

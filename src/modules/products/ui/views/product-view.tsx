@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { toast } from "sonner";
-import {RichText} from "@payloadcms/richtext-lexical/react"
+import { RichText } from "@payloadcms/richtext-lexical/react";
 // import { CartButton } from "../components/cart-button";
 
 const CartButton = dynamic(
@@ -85,20 +85,27 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
               </div>
               <div className="hidden lg:flex px-6 py-4 items-center justify-center">
                 <div className="flex items-center gap-2">
-                  <StarRating rating={data.reviewRating} iconClassName="size-4" />
-                  <p className="text-base font-medium">{data.reviewCount} ratings</p>
+                  <StarRating
+                    rating={data.reviewRating}
+                    iconClassName="size-4"
+                  />
+                  <p className="text-base font-medium">
+                    {data.reviewCount} ratings
+                  </p>
                 </div>
               </div>
             </div>
             <div className="block lg:hidden px-6 py-4 items-center justify-center border-b">
               <div className="flex items-center gap-2">
                 <StarRating rating={data.reviewRating} iconClassName="size-4" />
-                <p className="text-base font-medium">{data.reviewCount} ratings</p>
+                <p className="text-base font-medium">
+                  {data.reviewCount} ratings
+                </p>
               </div>
             </div>
             <div className="p-6">
               {data.description ? (
-                <RichText data={data.description}/>
+                <RichText data={data.description} />
               ) : (
                 <p className="font-medium text-muted-foreground italic">
                   No description available.
@@ -125,14 +132,11 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 
                       setTimeout(() => {
                         setIsCopied(false);
-                      },4000);
+                      }, 4000);
                     }}
                     disabled={isCopied}
                   >
-                    {isCopied 
-                      ? <CheckIcon/> 
-                      : <LinkIcon />
-                    }
+                    {isCopied ? <CheckIcon /> : <LinkIcon />}
                   </Button>
                 </div>
                 <p className="text-center font-medium">
@@ -156,8 +160,13 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                       <div className="font-medium">
                         {stars} {stars === 1 ? "star" : "stars"}
                       </div>
-                      <Progress value={data.ratingDistribution[stars]} className="h-[1lh]" />
-                      <div className="font-medium">{data.ratingDistribution[stars]}%</div>
+                      <Progress
+                        value={data.ratingDistribution[stars]}
+                        className="h-[1lh]"
+                      />
+                      <div className="font-medium">
+                        {data.ratingDistribution[stars]}%
+                      </div>
                     </Fragment>
                   ))}
                 </div>
@@ -169,7 +178,6 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
     </div>
   );
 };
-
 
 export const ProductViewSkeleton = () => {
   return (
@@ -185,5 +193,5 @@ export const ProductViewSkeleton = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

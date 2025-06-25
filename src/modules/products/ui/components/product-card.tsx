@@ -27,11 +27,11 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   const router = useRouter();
 
-  const handleUserClick = (e:React.MouseEvent<HTMLDivElement>) => {
+  const handleUserClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     router.push(generateTenantURL(tenantSlug));
-  }
+  };
 
   return (
     <Link href={`${generateTenantURL(tenantSlug)}/products/${id}`}>
@@ -68,11 +68,9 @@ export const ProductCard = ({
           )}
         </div>
         <div className="p-4">
-            <div className="relative px-2 py-1 border bg-pink-400 w-fit">
-                <p className="text-sm font-medium">
-                    {formatCurrency(price)}
-                </p>
-            </div>
+          <div className="relative px-2 py-1 border bg-pink-400 w-fit">
+            <p className="text-sm font-medium">{formatCurrency(price)}</p>
+          </div>
         </div>
       </div>
     </Link>
@@ -81,6 +79,6 @@ export const ProductCard = ({
 
 export const ProductCardSkeleton = () => {
   return (
-    <div className="w-full aspect-3/4 bg-neutral-200 rounded-lg animate-pulse"/>
-    );
+    <div className="w-full aspect-3/4 bg-neutral-200 rounded-lg animate-pulse" />
+  );
 };
